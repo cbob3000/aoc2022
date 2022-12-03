@@ -69,8 +69,9 @@ int roundScore(var ownMove, var oppMove) {
   var roundScore = 0;
   if (ownScore > oppScore) roundScore = 6;
   if (ownScore == oppScore) roundScore = 3;
-  if (ownScore == 3 && oppScore == 0) roundScore = 0; // the rock-scissors -case
-  print("round ${roundScore + ownScore}");
+  if (ownScore == 3 && oppScore == 1) roundScore = 0; // rock-scissors -cases
+  if (ownScore == 1 && oppScore == 3) roundScore = 6;
+  print("round ${roundScore}, own ${ownScore}, total ${roundScore + ownScore}");
   return roundScore + ownScore;
 }
 
