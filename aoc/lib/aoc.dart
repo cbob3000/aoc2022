@@ -159,3 +159,36 @@ Future<int> day3() async {
     return prioritiesSum;
   });
 }
+
+Future<int> day3_2() async {
+  String lowerPriorities = "abcdefghijklmnopqrstuvwxyz";
+  String higherPriorities = lowerPriorities.toUpperCase();
+  return await File('input/input3.txt').readAsString().then((String content) {
+    var sacks = content.split("\n");
+    int prioritiesSum = 0;
+    for (int l = 0; l < sacks.length; l += 3) {
+      List<String> elfGroup = [sacks[l], sacks[l + 1], sacks[l + 2]];
+      var groupContent = HashSet<String>();
+      elfGroup.forEach((content) {
+        var items = content.split('');
+        if (groupContent.isEmpty) {
+          groupContent.addAll(items);
+        } else {
+          groupContent.removeWhere((groupItem) => !items.contains(groupItem));
+        }
+      });
+
+      groupContent.forEach((item) {
+        if (lowerPriorities.indexOf(item) > 0) {
+          prioritiesSum += 1 + lowerPriorities.indexOf(item);
+        } else {
+          prioritiesSum += 27 + higherPriorities.indexOf(item);
+        }
+      });
+    }
+    return prioritiesSum;
+  });
+}
+
+
+///// DAY 4
