@@ -134,3 +134,28 @@ Future<int> day2_2() async {
     return score;
   });
 }
+
+//// DAY 3
+
+Future<int> day3() async {
+  String lowerPriorities = "abcdefghijklmnopqrstuvwxyz";
+  String higherPriorities = lowerPriorities.toUpperCase();
+  return await File('input/input3.txt').readAsString().then((String content) {
+    var sacks = content.split("\n");
+    int prioritiesSum = 0;
+    sacks.forEach((content) {
+      var middle = (content.length / 2).round();
+      var compartA = content.substring(0, middle).split('');
+      var compartB = content.substring(middle).split('');
+      var doubles = Set.from(compartA.where((element) => compartB.contains(element)));
+      doubles.forEach((item) {
+        if (lowerPriorities.indexOf(item) > 0) {
+          prioritiesSum += 1 + lowerPriorities.indexOf(item);
+        } else {
+          prioritiesSum += 27 + higherPriorities.indexOf(item);
+        }
+      });
+    });
+    return prioritiesSum;
+  });
+}
