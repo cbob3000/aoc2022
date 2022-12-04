@@ -190,5 +190,56 @@ Future<int> day3_2() async {
   });
 }
 
-
 ///// DAY 4
+
+Future<int> day4() async {
+  return await File('input/input4.txt').readAsString().then((String content) {
+    var assignments = content.split("\n");
+    int score = 0;
+    assignments.forEach((assignment) {
+      var pairs = assignment.split(",");
+      var rangesUnfold = List<String>.empty(growable: true);
+      pairs.forEach((pair) {
+        int start = int.parse(pair.split("-")[0]);
+        int end = int.parse(pair.split("-")[1]);
+        String unfold = "";
+        for (int i = start; i <= end; i++) {
+          unfold += "-${i}-:";
+        }
+        rangesUnfold.add(unfold.substring(0, unfold.length - 1));
+      });
+
+      if (rangesUnfold[0].contains(rangesUnfold[1]) || rangesUnfold[1].contains(rangesUnfold[0])) {
+        score++;
+      }
+    });
+
+    return score;
+  });
+}
+
+Future<int> day4_2() async {
+  return await File('input/input4.txt').readAsString().then((String content) {
+    var assignments = content.split("\n");
+    int score = 0;
+    assignments.forEach((assignment) {
+      var pairs = assignment.split(",");
+      var rangesUnfold = List<Set>.empty(growable: true);
+      pairs.forEach((pair) {
+        int start = int.parse(pair.split("-")[0]);
+        int end = int.parse(pair.split("-")[1]);
+        var unfold = Set<int>();
+        for (int i = start; i <= end; i++) {
+          unfold.add(i);
+        }
+        rangesUnfold.add(unfold);
+      });
+
+      if (-1 != rangesUnfold[0].firstWhere((element) => rangesUnfold[1].contains(element), orElse: () => -1)) {
+        score++;
+      }
+    });
+
+    return score;
+  });
+}
