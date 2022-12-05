@@ -273,8 +273,46 @@ Future<String> day5() async {
 
     var i = 1;
     stacks.forEach((stack) {
-        print("${i++}: ${stack}");
-      });
+      print("${i++}: ${stack}");
+    });
+
+    return result;
+  });
+}
+
+Future<String> day5_2() async {
+  return await File('input/input5.txt').readAsString().then((String content) {
+    var result = "";
+    var stacks = List<List<String>>.empty(growable: true);
+    stacks.add(["C", "Q", "B"]);
+    stacks.add(["Z", "W", "Q", "R"]);
+    stacks.add(["V", "L", "R", "M", "B"]);
+    stacks.add(["W", "T", "V", "H", "Z", "C"]);
+    stacks.add(["G", "V", "N", "B", "H", "Z", "D"]);
+    stacks.add(["Q", "V", "F", "J", "C", "P", "N", "H"]);
+    stacks.add(["S", "Z", "W", "R", "T", "G", "D"]);
+    stacks.add(["P", "Z", "W", "B", "N", "M", "G", "C"]);
+    stacks.add(["P", "F", "Q", "W", "M", "B", "J", "N"]);
+    var moves = content.split("\n");
+    moves.forEach((move) {
+      var split = move.split(" ");
+      int amount = int.parse(split[1]);
+      var from = int.parse(split[3]) - 1;
+      var to = int.parse(split[5]) - 1;
+      var transit = List<String>.empty(growable: true);
+      for (var i = 0; i < amount; i++) {
+        transit.add(stacks[from].removeAt(0));
+      }
+      var rev = List<String>.from(transit.reversed);
+      for (var i = 0; i < amount; i++) {
+        stacks[to].insert(0, rev[i]);
+      }
+    });
+
+    var i = 1;
+    stacks.forEach((stack) {
+      print("${i++}: ${stack}");
+    });
 
     return result;
   });
