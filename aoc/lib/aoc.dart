@@ -317,3 +317,18 @@ Future<String> day5_2() async {
     return result;
   });
 }
+
+///// DAY6
+
+Future<int> day6(int frameLen) async {
+  return await File('input/input6.txt').readAsString().then((String content) {
+    var input = content.split('');
+    for (int i = frameLen; i < input.length; i++) {
+      var frame = input.sublist(i - frameLen, i);
+      if (frame.toSet().length == frame.length) {
+        return i;
+      }
+    }
+    return 0;
+  });
+}
