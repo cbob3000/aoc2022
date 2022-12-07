@@ -16,7 +16,8 @@ Future<int> day1(int thisMany) async {
       if (top.length < thisMany) {
         top.add(totalCals);
       } else {
-        var high = top.firstWhere((element) => element < totalCals, orElse: () => -1);
+        var high =
+            top.firstWhere((element) => element < totalCals, orElse: () => -1);
         if (high > -1) {
           top.remove(high);
           top.add(totalCals);
@@ -147,7 +148,8 @@ Future<int> day3() async {
       var middle = (content.length / 2).round();
       var compartA = content.substring(0, middle).split('');
       var compartB = content.substring(middle).split('');
-      var doubles = Set.from(compartA.where((element) => compartB.contains(element)));
+      var doubles =
+          Set.from(compartA.where((element) => compartB.contains(element)));
       doubles.forEach((item) {
         if (lowerPriorities.indexOf(item) > 0) {
           prioritiesSum += 1 + lowerPriorities.indexOf(item);
@@ -209,7 +211,8 @@ Future<int> day4() async {
         rangesUnfold.add(unfold.substring(0, unfold.length - 1));
       });
 
-      if (rangesUnfold[0].contains(rangesUnfold[1]) || rangesUnfold[1].contains(rangesUnfold[0])) {
+      if (rangesUnfold[0].contains(rangesUnfold[1]) ||
+          rangesUnfold[1].contains(rangesUnfold[0])) {
         score++;
       }
     });
@@ -235,7 +238,10 @@ Future<int> day4_2() async {
         rangesUnfold.add(unfold);
       });
 
-      if (-1 != rangesUnfold[0].firstWhere((element) => rangesUnfold[1].contains(element), orElse: () => -1)) {
+      if (-1 !=
+          rangesUnfold[0].firstWhere(
+              (element) => rangesUnfold[1].contains(element),
+              orElse: () => -1)) {
         score++;
       }
     });
@@ -330,5 +336,41 @@ Future<int> day6(int frameLen) async {
       }
     }
     return 0;
+  });
+}
+
+//// DAY 7
+
+int calcDirectoryTotalSize(String root, int currentSize) {}
+
+Future<int> day7() async {
+  return await File('input/input7_test.txt')
+      .readAsString()
+      .then((String content) {
+    var input = content.split("\n");
+    var currentDir = List.empty(growable: true);
+    input.forEach((input) {
+      if (input[0] == "\$") {
+        // a command
+        var split = input.split(' ');
+        if (split[1] == "cd") {
+          if (split[2] == "..") {
+            //
+            currentDir.removeLast();
+          } else {
+            currentDir.add(split[2]);
+          }
+        } else {
+          // ls
+          // todo
+        }
+      } else {
+        // data
+
+      }
+    });
+    var result = 0;
+
+    return result;
   });
 }
