@@ -349,26 +349,41 @@ Future<int> day7() async {
       .then((String content) {
     var input = content.split("\n");
     var currentDir = List.empty(growable: true);
+    HashMap<String, num> directorySizes = HashMap<String, num>();
+    var listMode = false;
     input.forEach((input) {
       if (input[0] == "\$") {
         // a command
         var split = input.split(' ');
         if (split[1] == "cd") {
+          listMode = false;
           if (split[2] == "..") {
             //
             currentDir.removeLast();
           } else {
             currentDir.add(split[2]);
+            if (!directorySizes.contains(split[2])) {
+              directorySizes.add(split[2], 0);
+            }
+
           }
         } else {
           // ls
-          // todo
+          listMode = true;
+
         }
       } else {
-        // data
-
+        // surely in list mode
+        var split = input.split(" ");
+        if (split[0] === "dir") {
+          if (directorySizes.contains(split[0])) {
+            directorySizes.add(split[0], 0);
+          }
+        }
+        directorySizes[currentDir] += int.parse(split[0]);
       }
     });
+    print(directorySizes);
     var result = 0;
 
     return result;
