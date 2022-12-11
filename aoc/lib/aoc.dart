@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:ffi';
 import 'dart:io';
 
 //// DAY 1
@@ -8,7 +9,7 @@ Future<int> day1(int thisMany) async {
   return await File('input/input1.txt').readAsString().then((String content) {
     var elves = content.split("\n\n");
     var top = HashSet<int>();
-    elves.forEach((element) {
+    for (var element in elves) {
       int totalCals = 0;
       element.split("\n").forEach((food) {
         if (food.length > 1) totalCals += int.parse(food);
@@ -16,19 +17,18 @@ Future<int> day1(int thisMany) async {
       if (top.length < thisMany) {
         top.add(totalCals);
       } else {
-        var high =
-            top.firstWhere((element) => element < totalCals, orElse: () => -1);
+        var high = top.firstWhere((element) => element < totalCals, orElse: () => -1);
         if (high > -1) {
           top.remove(high);
           top.add(totalCals);
         }
       }
-    });
+    }
 
     var total = 0;
-    top.forEach((element) {
+    for (var element in top) {
       total += element;
-    });
+    }
 
     return total;
   });
@@ -110,12 +110,12 @@ Future<int> day2() async {
   return await File('input/input2.txt').readAsString().then((String content) {
     int score = 0;
     var rounds = content.split("\n");
-    rounds.forEach((round) {
+    for (var round in rounds) {
       if (round.length > 0) {
         var split = round.split(" ");
         score += roundScore(split[1], split[0]);
       }
-    });
+    }
 
     return score;
   });
@@ -125,12 +125,12 @@ Future<int> day2_2() async {
   return await File('input/input2.txt').readAsString().then((String content) {
     int score = 0;
     var rounds = content.split("\n");
-    rounds.forEach((round) {
+    for (var round in rounds) {
       if (round.length > 0) {
         var split = round.split(" ");
         score += roundScore2(split[1], split[0]);
       }
-    });
+    }
 
     return score;
   });
@@ -144,20 +144,19 @@ Future<int> day3() async {
   return await File('input/input3.txt').readAsString().then((String content) {
     var sacks = content.split("\n");
     int prioritiesSum = 0;
-    sacks.forEach((content) {
+    for (var content in sacks) {
       var middle = (content.length / 2).round();
       var compartA = content.substring(0, middle).split('');
       var compartB = content.substring(middle).split('');
-      var doubles =
-          Set.from(compartA.where((element) => compartB.contains(element)));
-      doubles.forEach((item) {
+      var doubles = Set.from(compartA.where((element) => compartB.contains(element)));
+      for (var item in doubles) {
         if (lowerPriorities.indexOf(item) > 0) {
           prioritiesSum += 1 + lowerPriorities.indexOf(item);
         } else {
           prioritiesSum += 27 + higherPriorities.indexOf(item);
         }
-      });
-    });
+      }
+    }
     return prioritiesSum;
   });
 }
@@ -171,22 +170,22 @@ Future<int> day3_2() async {
     for (int l = 0; l < sacks.length; l += 3) {
       List<String> elfGroup = [sacks[l], sacks[l + 1], sacks[l + 2]];
       var groupContent = HashSet<String>();
-      elfGroup.forEach((content) {
+      for (var content in elfGroup) {
         var items = content.split('');
         if (groupContent.isEmpty) {
           groupContent.addAll(items);
         } else {
           groupContent.removeWhere((groupItem) => !items.contains(groupItem));
         }
-      });
+      }
 
-      groupContent.forEach((item) {
+      for (var item in groupContent) {
         if (lowerPriorities.indexOf(item) > 0) {
           prioritiesSum += 1 + lowerPriorities.indexOf(item);
         } else {
           prioritiesSum += 27 + higherPriorities.indexOf(item);
         }
-      });
+      }
     }
     return prioritiesSum;
   });
@@ -198,10 +197,10 @@ Future<int> day4() async {
   return await File('input/input4.txt').readAsString().then((String content) {
     var assignments = content.split("\n");
     int score = 0;
-    assignments.forEach((assignment) {
+    for (var assignment in assignments) {
       var pairs = assignment.split(",");
       var rangesUnfold = List<String>.empty(growable: true);
-      pairs.forEach((pair) {
+      for (var pair in pairs) {
         int start = int.parse(pair.split("-")[0]);
         int end = int.parse(pair.split("-")[1]);
         String unfold = "";
@@ -209,13 +208,12 @@ Future<int> day4() async {
           unfold += "-${i}-:";
         }
         rangesUnfold.add(unfold.substring(0, unfold.length - 1));
-      });
+      }
 
-      if (rangesUnfold[0].contains(rangesUnfold[1]) ||
-          rangesUnfold[1].contains(rangesUnfold[0])) {
+      if (rangesUnfold[0].contains(rangesUnfold[1]) || rangesUnfold[1].contains(rangesUnfold[0])) {
         score++;
       }
-    });
+    }
 
     return score;
   });
@@ -225,10 +223,10 @@ Future<int> day4_2() async {
   return await File('input/input4.txt').readAsString().then((String content) {
     var assignments = content.split("\n");
     int score = 0;
-    assignments.forEach((assignment) {
+    for (var assignment in assignments) {
       var pairs = assignment.split(",");
       var rangesUnfold = List<Set>.empty(growable: true);
-      pairs.forEach((pair) {
+      for (var pair in pairs) {
         int start = int.parse(pair.split("-")[0]);
         int end = int.parse(pair.split("-")[1]);
         var unfold = Set<int>();
@@ -236,15 +234,12 @@ Future<int> day4_2() async {
           unfold.add(i);
         }
         rangesUnfold.add(unfold);
-      });
+      }
 
-      if (-1 !=
-          rangesUnfold[0].firstWhere(
-              (element) => rangesUnfold[1].contains(element),
-              orElse: () => -1)) {
+      if (-1 != rangesUnfold[0].firstWhere((element) => rangesUnfold[1].contains(element), orElse: () => -1)) {
         score++;
       }
-    });
+    }
 
     return score;
   });
@@ -266,7 +261,7 @@ Future<String> day5() async {
     stacks.add(["P", "Z", "W", "B", "N", "M", "G", "C"]);
     stacks.add(["P", "F", "Q", "W", "M", "B", "J", "N"]);
     var moves = content.split("\n");
-    moves.forEach((move) {
+    for (var move in moves) {
       var split = move.split(" ");
       int amount = int.parse(split[1]);
       var from = int.parse(split[3]) - 1;
@@ -275,12 +270,12 @@ Future<String> day5() async {
         var transit = stacks[from].removeAt(0);
         stacks[to].insert(0, transit);
       }
-    });
+    }
 
     var i = 1;
-    stacks.forEach((stack) {
+    for (var stack in stacks) {
       print("${i++}: ${stack}");
-    });
+    }
 
     return result;
   });
@@ -300,7 +295,7 @@ Future<String> day5_2() async {
     stacks.add(["P", "Z", "W", "B", "N", "M", "G", "C"]);
     stacks.add(["P", "F", "Q", "W", "M", "B", "J", "N"]);
     var moves = content.split("\n");
-    moves.forEach((move) {
+    for (var move in moves) {
       var split = move.split(" ");
       int amount = int.parse(split[1]);
       var from = int.parse(split[3]) - 1;
@@ -313,12 +308,12 @@ Future<String> day5_2() async {
       for (var i = 0; i < amount; i++) {
         stacks[to].insert(0, rev[i]);
       }
-    });
+    }
 
     var i = 1;
-    stacks.forEach((stack) {
+    for (var stack in stacks) {
       print("${i++}: ${stack}");
-    });
+    }
 
     return result;
   });
@@ -341,50 +336,57 @@ Future<int> day6(int frameLen) async {
 
 //// DAY 7
 
-int calcDirectoryTotalSize(String root, int currentSize) {}
+int calcDirectoryTotalSize(String root, int currentSize) {
+  return 0;
+}
 
 Future<int> day7() async {
-  return await File('input/input7_test.txt')
-      .readAsString()
-      .then((String content) {
+  return await File('input/input7.txt').readAsString().then((String content) {
     var input = content.split("\n");
-    var currentDir = List.empty(growable: true);
-    HashMap<String, num> directorySizes = HashMap<String, num>();
-    var listMode = false;
-    input.forEach((input) {
+    var currentPath = List.empty(growable: true);
+    Map<String, int> directorySizes = HashMap<String, int>();
+    for (var input in input) {
       if (input[0] == "\$") {
         // a command
         var split = input.split(' ');
         if (split[1] == "cd") {
-          listMode = false;
           if (split[2] == "..") {
-            //
-            currentDir.removeLast();
+            currentPath.removeLast();
           } else {
-            currentDir.add(split[2]);
-            if (!directorySizes.contains(split[2])) {
-              directorySizes.add(split[2], 0);
+            currentPath.add(split[2]);
+            if (!directorySizes.containsKey(split[2])) {
+              directorySizes[split[2]] = 0;
             }
-
           }
-        } else {
-          // ls
-          listMode = true;
-
         }
       } else {
         // surely in list mode
         var split = input.split(" ");
-        if (split[0] === "dir") {
-          if (directorySizes.contains(split[0])) {
-            directorySizes.add(split[0], 0);
+        if (split[0] == "dir") {
+          if (!directorySizes.containsKey(split[0])) {
+            directorySizes[split[0]] = 0;
+          }
+        } else {
+          // ls output
+          int size = int.parse(split[0]);
+          print("size ${size}");
+          for (var dirName in currentPath) {
+            int currentDirSize = directorySizes[dirName] ?? 0;
+            currentDirSize += size;
+            directorySizes[dirName] = currentDirSize;
           }
         }
-        directorySizes[currentDir] += int.parse(split[0]);
       }
-    });
-    print(directorySizes);
+    }
+    // print(directorySizes);
     var result = 0;
+    for (var dir in directorySizes.keys) {
+      //print("dir ${dir} total size is ${directorySizes[dir]}");
+      if ((directorySizes[dir] ?? 0) <= 100000) {
+        //print("adding");
+        result += directorySizes[dir] ?? 0;
+      }
+    }
 
     return result;
   });
