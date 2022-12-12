@@ -336,14 +336,18 @@ Future<int> day6(int frameLen) async {
 
 //// DAY 7
 
-int calcDirectoryTotalSize(String root, int currentSize) {
-  return 0;
+String getFullPath(List<String> currentPath) {
+  var path = "";
+  for (String dir in currentPath) {
+    path += "${dir}/";
+  }
+  return path;
 }
 
 Future<int> day7() async {
   return await File('input/input7.txt').readAsString().then((String content) {
     var input = content.split("\n");
-    var currentPath = List.empty(growable: true);
+    var currentPath = List<String>.empty(growable: true);
     Map<String, int> directorySizes = HashMap<String, int>();
     for (var input in input) {
       if (input[0] == "\$") {
@@ -354,9 +358,9 @@ Future<int> day7() async {
             currentPath.removeLast();
           } else {
             currentPath.add(split[2]);
-            if (!directorySizes.containsKey(split[2])) {
-              directorySizes[split[2]] = 0;
-            }
+            // if (!directorySizes.containsKey(split[2])) {
+            //   directorySizes[split[2]] = 0;
+            // }
           }
         }
       } else {
@@ -371,9 +375,15 @@ Future<int> day7() async {
           int size = int.parse(split[0]);
           print("size ${size}");
           for (var dirName in currentPath) {
-            int currentDirSize = directorySizes[dirName] ?? 0;
+            //var fullPath = getFullPath(currentPath);
+            var useDirName = dirName;
+            if (directorySizes.containsKey(dirName)) {
+              useDirName = "${dirName}${dirName}";
+            }
+            int currentDirSize = directorySizes[useDirName] ?? 0;
             currentDirSize += size;
-            directorySizes[dirName] = currentDirSize;
+            directorySizes[useDirName] = currentDirSize;
+            //print("${fullPath}");
           }
         }
       }
@@ -381,7 +391,7 @@ Future<int> day7() async {
     // print(directorySizes);
     var result = 0;
     for (var dir in directorySizes.keys) {
-      //print("dir ${dir} total size is ${directorySizes[dir]}");
+      print("dir ${dir} total size is ${directorySizes[dir]}");
       if ((directorySizes[dir] ?? 0) <= 100000) {
         //print("adding");
         result += directorySizes[dir] ?? 0;
