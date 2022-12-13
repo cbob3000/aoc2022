@@ -7,5 +7,6 @@ void main(List<String> arguments) async {
   //print('day3-1 ${await aoc.day3_2()}!');
   //print('day4 ${await aoc.day4_2()}!');
   //print('day5 ${await aoc.day6(14)}!');
-  print('day5 ${await aoc.day7()}!');
+  //print('day5 ${await aoc.day7()}!');
+  print('day8 ${await aoc.day8()}!');
 }

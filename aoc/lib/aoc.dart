@@ -358,13 +358,10 @@ Future<int> day7() async {
             currentPath.removeLast();
           } else {
             currentPath.add(split[2]);
-            // if (!directorySizes.containsKey(split[2])) {
-            //   directorySizes[split[2]] = 0;
-            // }
           }
         }
       } else {
-        // surely in list mode
+        // list mode
         var split = input.split(" ");
         if (split[0] == "dir") {
           if (!directorySizes.containsKey(split[0])) {
@@ -375,7 +372,6 @@ Future<int> day7() async {
           int size = int.parse(split[0]);
           print("size ${size}");
           for (var dirName in currentPath) {
-            //var fullPath = getFullPath(currentPath);
             var useDirName = dirName;
             if (directorySizes.containsKey(dirName)) {
               useDirName = "${dirName}${dirName}";
@@ -383,7 +379,6 @@ Future<int> day7() async {
             int currentDirSize = directorySizes[useDirName] ?? 0;
             currentDirSize += size;
             directorySizes[useDirName] = currentDirSize;
-            //print("${fullPath}");
           }
         }
       }
@@ -395,6 +390,79 @@ Future<int> day7() async {
       if ((directorySizes[dir] ?? 0) <= 100000) {
         //print("adding");
         result += directorySizes[dir] ?? 0;
+      }
+    }
+
+    return result;
+  });
+}
+
+//// day 8
+///
+
+Future<int> day8() async {
+  return await File('input/input8.txt').readAsString().then((String content) {
+    var result = 0;
+    var rows = content.split("\n");
+    var gridHeight = rows.length;
+    var width = rows[0].length;
+
+    result += (2 * width) + (2 * gridHeight) - 4;
+
+    //  left-right
+    for (int t = 1; t < gridHeight - 1; t++) {
+      int highest = int.parse(rows[t][0]);
+      for (int l = 1; l < width - 1; l++) {
+        int height = int.parse(rows[t][l]);
+        if (height > highest) {
+          result++;
+          //print("left-right ${l}, row ${t}, height ${height}");
+          highest = height;
+        } else {
+          break;
+        }
+      }
+    }
+    // right-left
+    for (int t = 1; t < gridHeight - 1; t++) {
+      int highest = int.parse(rows[t][width - 1]);
+      for (int r = width - 2; r >= 1; r--) {
+        int height = int.parse(rows[t][r]);
+        if (height > highest) {
+          result++;
+          //print("right-left ${r}, row ${t}, height ${height}");
+          highest = height;
+        } else {
+          break;
+        }
+      }
+    }
+    //  top-bottom
+    for (int l = 1; l < width - 1; l++) {
+      int highest = int.parse(rows[0][l]);
+      for (int t = 1; t < gridHeight - 1; t++) {
+        int height = int.parse(rows[t][l]);
+        if (height > highest) {
+          result++;
+          //print("top-bottom ${l}, row ${t}, height ${height}");
+          highest = height;
+        } else {
+          break;
+        }
+      }
+    }
+    //  bottom-top
+    for (int l = 1; l < width - 1; l++) {
+      int highest = int.parse(rows[gridHeight - 1][l]);
+      for (int t = gridHeight - 2; t >= 1; t--) {
+        int height = int.parse(rows[t][l]);
+        if (height > highest) {
+          result++;
+          //print("bottom-top ${l}, row ${t}, height ${height}");
+          highest = height;
+        } else {
+          break;
+        }
       }
     }
 
