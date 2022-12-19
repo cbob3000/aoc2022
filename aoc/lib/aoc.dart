@@ -469,3 +469,36 @@ Future<int> day8() async {
     return result;
   });
 }
+
+/// day 20
+int getValueAtPos(List<int> input, int position, int length) {
+  return input[position % length];
+}
+
+Future<int> day20() async {
+  return await File('input/input20_test.txt').readAsString().then((String content) {
+    var input = content.split("\n");
+    var intInput = List<int>.empty(growable: true);
+    int length = input.length;
+    var stack = List<int>.empty(growable: true);
+    var result = 0;
+    for (int i = 0; i < input.length; i++) {
+      stack.add(int.parse(input[i]));
+      intInput.add(int.parse(input[i]));
+    }
+    print(stack);
+    for (int i = 0; i < input.length; i++) {
+      int value = intInput[i];
+      int newPosition = (value + i) % length;
+      int existingValue =
+      stack[newPosition] = value;
+      print(stack);
+    }
+    print(stack);
+    result += getValueAtPos(stack, 1000, length);
+    result += getValueAtPos(stack, 2000, length);
+    result += getValueAtPos(stack, 3000, length);
+    return result;
+  }
+  );
+}
