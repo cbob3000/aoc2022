@@ -437,6 +437,7 @@ Future<int> day8() async {
         }
       }
     }
+
     //  top-bottom
     for (int l = 1; l < width - 1; l++) {
       int highest = int.parse(rows[0][l]);
@@ -470,6 +471,19 @@ Future<int> day8() async {
   });
 }
 
+Future<int> day8B() async {
+  return await File('input/input8.txt').readAsString().then((String content) {
+    var result = 0;
+    var rows = content.split("\n");
+    var gridHeight = rows.length;
+    var gridWidth = rows[0].length;
+
+    result += (2 * gridWidth) + (2 * gridHeight) - 4;
+
+    return result;
+  });
+}
+
 /// day 20
 int getValueAtPos(List<int> input, int position, int length) {
   return input[position % length];
@@ -490,15 +504,97 @@ Future<int> day20() async {
     for (int i = 0; i < input.length; i++) {
       int value = intInput[i];
       int newPosition = (value + i) % length;
-      int existingValue =
-      stack[newPosition] = value;
+      int existingValue = stack[newPosition] = value;
       print(stack);
     }
     print(stack);
+
+    print(getValueAtPos(stack, 1000, length));
+    print(getValueAtPos(stack, 2000, length));
+    print(getValueAtPos(stack, 3000, length));
     result += getValueAtPos(stack, 1000, length);
     result += getValueAtPos(stack, 2000, length);
     result += getValueAtPos(stack, 3000, length);
+
     return result;
-  }
-  );
+  });
+}
+
+class Instruction {
+  Instruction(this.duration, this.addx);
+  int duration = 0;
+  int addx = 0;
+}
+
+Future<int> day10() async {
+  return await File('input/input10.txt').readAsString().then((String content) {
+    var input = content.split("\n");
+    var exeQue = Queue<Instruction>();
+    var sampleCycles = [20, 60, 100, 140, 180, 220];
+    var signalSamples = List<int>.empty(growable: true);
+    var result = 0;
+    var cycle = 0;
+    var x = 1;
+    for (int i = 0; i < input.length; i++) {
+      var split = input[i].split(" ");
+      if (split[0] == "noop") {
+        exeQue.add(Instruction(1, 0));
+      } else {
+        exeQue.add(Instruction(2, int.parse(split[1])));
+      }
+    }
+    exeQue.forEach((instruction) {
+      for (var c = 0; c < instruction.duration; c++) {
+        cycle += 1;
+        if (sampleCycles.contains(cycle)) {
+          signalSamples.add(cycle * x);
+          print("sample at ${cycle}: ${cycle * x}");
+        }
+      }
+      x += instruction.addx;
+    });
+    signalSamples.forEach((element) {
+      result += element;
+    });
+    return result;
+  });
+}
+
+Future<int> day10_2() async {
+  return await File('input/input10.txt').readAsString().then((String content) {
+    var input = content.split("\n");
+    var exeQue = Queue<Instruction>();
+    var output = "";
+    var result = 0;
+    var cycle = 0;
+    var redu = 0;
+    var x = 1;
+    for (int i = 0; i < input.length; i++) {
+      var split = input[i].split(" ");
+      if (split[0] == "noop") {
+        exeQue.add(Instruction(1, 0));
+      } else {
+        exeQue.add(Instruction(2, int.parse(split[1])));
+      }
+    }
+    exeQue.forEach((instruction) {
+      for (var c = 0; c < instruction.duration; c++) {
+        var fixCyc = cycle - redu;
+        if ((x - 1) == fixCyc || (x) == fixCyc || (x + 1) == fixCyc) {
+          output += "#";
+        } else {
+          output += ".";
+        }
+        cycle += 1;
+        if ((cycle) % 40 == 0) {
+          output += "\n";
+          redu += 40;
+        }
+      }
+      x += instruction.addx;
+    });
+
+    print(output);
+    return result;
+  });
 }
